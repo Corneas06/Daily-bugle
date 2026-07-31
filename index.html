@@ -22,6 +22,8 @@
     <div class="content" id="article-content"></div>
 </div>
 
+<!-- Load content data first, then load script -->
+<script src="content.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
@@ -133,54 +135,51 @@ blockquote {
     margin: 15px 0;
     column-span: all;
 }
-{
-  "headline": "THE CITY NEEDS THESE BOYS TO TOUCH GRASS",
-  "meta": "By Corneas | Published Today",
-  "images": [
-    {
-      "src": "image_0.png",
-      "caption": "EVIDENCE A: The suspect ‘Sachito’ displaying alarming levels of digital lock-in. Note the absence of physical sunlight reflection."
-    },
-    {
-      "src": "image_1.png",
-      "caption": "EVIDENCE B: A secondary suspect, captured attempting a menacing ‘tuff’ stance while stationary in a chair."
-    }
-  ],
-  "paragraphs": [
-    "<strong>NICE, FRANCE</strong> — In an unprecedented local crisis today, authorities along the French Riviera expressed utter disbelief at local kids who refuse to leave their rooms or step outside onto the Mediterranean coast.",
-    "Reports indicate that a local squad has been spending upwards of 14 hours a day glued to Roblox games, locked in high-stakes digital football matches while ignoring the real world outside.",
-    "blockquote: \"They try to talk big and hit anime poses, but they haven't seen natural sunlight in three days,\" eyewitnesses reportedly remarked.",
-    "Sources confirm that despite trying to project a menacing aura online, the squad's actual physical threat level remains at an all-time low. Eyewitnesses recommend immediate intervention in the form of touching grass or taking a walk down the Promenade des Anglais."
-  ]
-}
-fetch('content.json')
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('article-headline').innerText = data.headline;
-        document.getElementById('article-meta').innerText = data.meta;
+const articleData = {
+    headline: "THE CITY NEEDS THESE BOYS TO TOUCH GRASS",
+    meta: "By Corneas | Published Today",
+    images: [
+        {
+            src: "image_0.png",
+            caption: "EVIDENCE A: The suspect ‘Sachito’ displaying alarming levels of digital lock-in. Note the absence of physical sunlight reflection."
+        },
+        {
+            src: "image_1.png",
+            caption: "EVIDENCE B: A secondary suspect, captured attempting a menacing ‘tuff’ stance while stationary in a chair."
+        }
+    ],
+    paragraphs: [
+        "<strong>NICE, FRANCE</strong> — In an unprecedented local crisis today, authorities along the French Riviera expressed utter disbelief at local kids who refuse to leave their rooms or step outside onto the Mediterranean coast.",
+        "Reports indicate that a local squad has been spending upwards of 14 hours a day glued to Roblox games, locked in high-stakes digital football matches while ignoring the real world outside.",
+        "blockquote: \"They try to talk big and hit anime poses, but they haven't seen natural sunlight in three days,\" eyewitnesses reportedly remarked.",
+        "Sources confirm that despite trying to project a menacing aura online, the squad's actual physical threat level remains at an all-time low. Eyewitnesses recommend immediate intervention in the form of touching grass or taking a walk down the Promenade des Anglais."
+    ]
+};
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('article-headline').innerText = articleData.headline;
+    document.getElementById('article-meta').innerText = articleData.meta;
 
-        const photoContainer = document.getElementById('photo-container');
-        data.images.forEach(imgData => {
-            const photoDiv = document.createElement('div');
-            photoDiv.className = 'bugle-photo';
-            photoDiv.innerHTML = `
-                <img src="${imgData.src}" alt="Evidence Photo">
-                <div class="photo-caption">${imgData.caption}</div>
-            `;
-            photoContainer.appendChild(photoDiv);
-        });
+    const photoContainer = document.getElementById('photo-container');
+    articleData.images.forEach(imgData => {
+        const photoDiv = document.createElement('div');
+        photoDiv.className = 'bugle-photo';
+        photoDiv.innerHTML = `
+            <img src="${imgData.src}" alt="Evidence Photo">
+            <div class="photo-caption">${imgData.caption}</div>
+        `;
+        photoContainer.appendChild(photoDiv);
+    });
 
-        const contentContainer = document.getElementById('article-content');
-        data.paragraphs.forEach(text => {
-            if (text.startsWith('blockquote:')) {
-                const quote = document.createElement('blockquote');
-                quote.innerText = text.replace('blockquote:', '').trim();
-                contentContainer.appendChild(quote);
-            } else {
-                const p = document.createElement('p');
-                p.innerHTML = text;
-                contentContainer.appendChild(p);
-            }
-        });
-    })
-    .catch(error => console.error('Error loading newspaper content:', error));
+    const contentContainer = document.getElementById('article-content');
+    articleData.paragraphs.forEach(text => {
+        if (text.startsWith('blockquote:')) {
+            const quote = document.createElement('blockquote');
+            quote.innerText = text.replace('blockquote:', '').trim();
+            contentContainer.appendChild(quote);
+        } else {
+            const p = document.createElement('p');
+            p.innerHTML = text;
+            contentContainer.appendChild(p);
+        }
+    });
+});
